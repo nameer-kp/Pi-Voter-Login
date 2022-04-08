@@ -7,21 +7,15 @@ import {
   Routes,
   Route
 } from "react-router-dom";
-import ElectionTable from './components/ElectionTable/ElectionTable';
+import TabNavigation from './components/TabNavigation/TabNavigation';
+
 
 function App() {
   return (
     <>
     
-      <BrowserRouter>
-      <Routes>
-        <Route path="/" exact element={<Login/>}/>
-        <Route path="/Election" exact element={<ElectionTable/>}/>
-        <Route path="/Voter" exact element={<Voter/>}/>
-        <Route path="/Candidates" exact element={<Candidates/>}/>
-      </Routes>
-      </BrowserRouter>
-
+      <Login/>
+     
       
      
       

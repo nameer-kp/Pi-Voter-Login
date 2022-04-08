@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import ElectionTable from '../ElectionTable/ElectionTable';
+import TabNavigation from '../TabNavigation/TabNavigation';
+import ElectionTable from '../TabNavigation/TabNavigation';
 import './Login.css';
 
 function Login() {
@@ -45,7 +46,7 @@ function Login() {
         
       </form>
     </div>
-  </div>):<ElectionTable/>}
+  </div>):<TabNavigation/>}
       
     
    </>
