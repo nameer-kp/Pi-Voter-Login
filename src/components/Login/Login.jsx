@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TabNavigation from '../TabNavigation/TabNavigation';
-import ElectionTable from '../TabNavigation/TabNavigation';
+// import ElectionTable from '../TabNavigation/TabNavigation';
 import './Login.css';
 
 function Login() {

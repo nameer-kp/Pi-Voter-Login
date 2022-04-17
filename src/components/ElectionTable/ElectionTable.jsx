@@ -4,13 +4,15 @@ export default function ElectionTable() {
   return (
     <div>
         
-        <Table striped bordered hover>
+    <Table striped bordered hover>
     <thead>
       <tr>
-        <th>Voter ID</th>
-        <th>Voter's name</th>
+        <th>Election ID</th>
         <th>Election name</th>
         <th>No:of voters</th>
+        <th>No:of Candidates</th>
+        <th>Election End Date</th>
+
       </tr>
     </thead>
     <tbody>
@@ -29,6 +31,7 @@ export default function ElectionTable() {
       <tr>
         <td>3</td>
         <td>Larry the Bird</td>
+        <td>@twitter</td>
         <td>@twitter</td>
       </tr>
     </tbody>

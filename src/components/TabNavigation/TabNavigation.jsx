@@ -3,7 +3,8 @@ import { Tabs,Tab } from 'react-bootstrap';
 import Candidates from '../Candidates/Candidates';
 import ElectionTable from '../ElectionTable/ElectionTable';
 import Voter from '../voter/Voter';
-
+import {Button,Container,Nav} from 'react-bootstrap';
+import Navbar from 'react-bootstrap/Navbar'
 
 export default function TabNavigation() {
     
@@ -11,17 +12,33 @@ export default function TabNavigation() {
   
 
 <div>
-<Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mb-3">
-  <Tab eventKey="home" title="Home">
+<Navbar bg="dark" variant="dark">
+    <Container>
+    <Navbar.Brand>Navbar</Navbar.Brand>
+    <Nav className="me-auto" >
+    
+      <Button as="input" type="submit" value="Log-out" className="col-md-12  text-right"/>{' '}
+
+    </Nav>
+    </Container>
+  </Navbar>
+<Tabs defaultActiveKey="Election" id="uncontrolled-tab-example" className="mb-3">
+  <Tab eventKey="Election" title="Election">
     <ElectionTable />
   </Tab>
-  <Tab eventKey="profile" title="Profile">
+  <Tab eventKey="Voter" title="Voter">
     <Voter />
   </Tab>
-  <Tab eventKey="contact" title="Contact" disabled>
-    <Candidates />
+  
+
+  
+  <Tab eventKey="Candidate" title="Candidate">
+  
+    <Candidates/>
+    
   </Tab>
 </Tabs>
+
     
 
 
