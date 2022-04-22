@@ -1,10 +1,14 @@
-import React from 'react'
+import React,{ useState } from 'react';
 import { Table } from 'react-bootstrap'
+import {Button} from 'react-bootstrap';
+import ElectionForm from './../ElectionForm/ElectionForm';
 export default function ElectionTable() {
+  const [viewForm, setViewForm] = useState(false)
   return (
     <div>
-        
-    <Table striped bordered hover>
+     {!viewForm?(
+       <div>
+         <Table striped bordered hover>
     <thead>
       <tr>
         <th>Election ID</th>
@@ -35,7 +39,13 @@ export default function ElectionTable() {
         <td>@twitter</td>
       </tr>
     </tbody>
-    </Table></div>
+    </Table>
+    
+    <Button as="input" type="submit" value="Add Election" className="col-md-12  text-right" onClick={()=>{setViewForm(true)}}/>{' '}
+       </div>):<ElectionForm setViewForm={setViewForm}/>}   
+    
+    </div>
+    
   )
 }
 

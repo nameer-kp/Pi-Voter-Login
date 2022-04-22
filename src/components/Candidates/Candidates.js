@@ -10,7 +10,7 @@ export default function Candidates() {
         <th>Candidate name</th>
         <th>Election</th>
         <th>Party Name</th>
-        <th>Election End Date</th>
+        
         
       </tr>
     </thead>

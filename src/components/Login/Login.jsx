@@ -46,7 +46,7 @@ function Login() {
         
       </form>
     </div>
-  </div>):<TabNavigation/>}
+  </div>):<TabNavigation login={setLogin} />}
       
     
    </>
