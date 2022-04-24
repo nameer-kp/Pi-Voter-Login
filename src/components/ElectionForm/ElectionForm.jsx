@@ -10,10 +10,10 @@ export default function ElectionForm(props) {
 
 
   const [allVoters, setAllVoters] = useState([
-    { name: "", description: "", price: null, rating: null },
+    { name: "", voterId: "", mobileNo: null, age: null },
   ]);
   const [allCandidates, setAllCandidates] = useState([
-    { name: "", description: "", price: null, rating: null },
+    { name: "", partyName: "", price: null, rating: null },
   ]);
   const handleAddVoters = () => {
     const values = [...allVoters];
@@ -100,7 +100,7 @@ export default function ElectionForm(props) {
                           <Form.Control
                             type="text"
                             name="name"
-                            placeholder="Enter Name"
+                            placeholder="Enter Voter Name"
                             value={field.name}
                             onChange={(event) =>
                               handleInputChange(index, event)
@@ -111,8 +111,8 @@ export default function ElectionForm(props) {
                           <Form.Control
                             type="text"
                             name="description"
-                            placeholder="Enter Description"
-                            value={field.description}
+                            placeholder="Enter Voter Id"
+                            value={field.voterId}
                             onChange={(event) =>
                               handleInputChange(index, event)
                             }
@@ -122,8 +122,8 @@ export default function ElectionForm(props) {
                           <Form.Control
                             type="number"
                             name="price"
-                            placeholder="Enter Price"
-                            value={field.price}
+                            placeholder="Enter Mobile No"
+                            value={field.mobileNo}
                             onChange={(event) =>
                               handleInputChange(index, event)
                             }
@@ -133,8 +133,8 @@ export default function ElectionForm(props) {
                           <Form.Control
                             type="number"
                             name="rating"
-                            placeholder="Enter Rating"
-                            value={field.rating}
+                            placeholder="Enter Age"
+                            value={field.age}
                             onChange={(event) =>
                               handleInputChange(index, event)
                             }
@@ -164,7 +164,7 @@ export default function ElectionForm(props) {
         <Col xs="6" >
           <h3>Candidates Form Fields</h3>
           <Button variant="primary" onClick={() => handleAddCandidates()}>
-            Add Voter
+            Add Candidate
           </Button>
         </Col>
         <Col xs="12">
@@ -175,12 +175,12 @@ export default function ElectionForm(props) {
                   {allCandidates.map((field, index) => (
                     <Col xs="4">
                       <div className="add-player-div">
-                        <h4>Voter {index + 1}</h4>
+                        <h4>Candidate {index + 1}</h4>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                           <Form.Control
                             type="text"
                             name="name"
-                            placeholder="Enter Name"
+                            placeholder="Enter Candidate Name"
                             value={field.name}
                             onChange={(event) =>
                               handleInputChangeCandidates(index, event)
@@ -191,8 +191,8 @@ export default function ElectionForm(props) {
                           <Form.Control
                             type="text"
                             name="description"
-                            placeholder="Enter Description"
-                            value={field.description}
+                            placeholder="Enter Party Name"
+                            value={field.partyName}
                             onChange={(event) =>
                               handleInputChangeCandidates(index, event)
                             }
@@ -209,17 +209,7 @@ export default function ElectionForm(props) {
                             }
                           />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                          <Form.Control
-                            type="number"
-                            name="rating"
-                            placeholder="Enter Rating"
-                            value={field.rating}
-                            onChange={(event) =>
-                              handleInputChangeCandidates(index, event)
-                            }
-                          />
-                        </Form.Group>
+                        
                         <Button
                           variant="secondary"
                           onClick={() => handleRemoveCandidates(index)}

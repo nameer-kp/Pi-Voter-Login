@@ -16,13 +16,14 @@ return (
   
 <Navbar bg="dark" variant="dark">
     <Container>
-    <Navbar.Brand>Navbar</Navbar.Brand>
-    <Nav className="me-auto" >
+    <Navbar.Brand>B-Voter Admin Panel</Navbar.Brand>
+   
     
-    <Button as="input" type="submit" value="Log-out" className="col-md-12  text-right" onClick={()=>{props.login(false)}}/>{' '}
+    
 
-    </Nav>
+    
     </Container>
+    <Button as="input" type="submit" value="Log-out" className="float-end"  onClick={()=>{props.login(false)}}/>{' '}
   </Navbar>
 <Tabs defaultActiveKey="Election" id="uncontrolled-tab-example" className="mb-3">
   <Tab eventKey="Election" title="Election">
