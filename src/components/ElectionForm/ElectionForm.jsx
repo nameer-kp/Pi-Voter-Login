@@ -2,6 +2,7 @@
 import React from 'react'
 import { useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import Voter from '../voter/Voter';
 
 
 export default function ElectionForm(props) {
@@ -10,18 +11,19 @@ export default function ElectionForm(props) {
 
 
   const [allVoters, setAllVoters] = useState([
-    { name: "", voterId: "", mobileNo: null, age: null },
+    { name: "", voterId: "", mobileNo: null, age: null,photo:null},
   ]);
   const [allCandidates, setAllCandidates] = useState([
-    { name: "", partyName: "", price: null, rating: null },
+    { name: "", partyName: "", logo: null },
   ]);
   const handleAddVoters = () => {
     const values = [...allVoters];
     values.push({
       name: "",
-      description: "",
-      price: null,
-      rating: null,
+      voterId: "",
+      mobileNo: null,
+      age: null,
+      photo:null
     });
     setAllVoters(values);
   };
@@ -30,23 +32,56 @@ export default function ElectionForm(props) {
     values.splice(index, 1);
     setAllVoters(values);
   };
+  function onSubmitHandler(){
+   const isConfirm= window.confirm("are you sure?")
+   if(isConfirm){
+    const formData = new FormData();
+    formData.append('Voters', allVoters);
+    formData.append('Candidates',allCandidates)
+    
+    console.log(allVoters);
+    console.log("submit success: ",formData.get('Voters'));
+    fetch(
+			'http://127.0.0.1:5000/add_data',
+			{
+				method: 'POST',
+				body: formData,
+        headers:{'content-type': 'multipart/form-data'},
 
+			}
+		)
+			.then((response) => response.json())
+			.then((result) => {
+				console.log('Success:', result);
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+
+   }
+  }
   const handleInputChange = (index, event) => {
     const values = [...allVoters];
     const updatedValue = event.target.name;
-    values[index][updatedValue] = event.target.value;
-
+    
+    if(updatedValue=='photo'){
+      values[index]['photo']=event.target.files[0]
+    }
+    else{
+      values[index][updatedValue] = event.target.value;
+    }
+    
     setAllVoters(values);
   };
- 
+  
 
   const handleAddCandidates = () => {
     const values = [...allCandidates];
     values.push({
       name: "",
-      description: "",
-      price: null,
-      rating: null,
+      partyName: "",
+      logo: null,
+      
     });
     setAllCandidates(values);
   };
@@ -60,17 +95,22 @@ export default function ElectionForm(props) {
     const values = [...allCandidates];
     const updatedValue = event.target.name;
     values[index][updatedValue] = event.target.value;
-
+    if(updatedValue=='logo'){
+      values[index]['logo']=event.target.files[0]
+    }
+    else{
+      values[index][updatedValue] = event.target.value;
+    }
     setAllCandidates(values);
   };
 
-  console.log(allVoters);
+
 
  
   return (
     <div>
       <label for="fname">Election Name:</label><br/>
-  <input type="text" id="fname" name="fname" value="John"/><br/>
+  <input type="text" id="fname" name="fname" /><br/>
   <label for="lname">No of Candidates</label><br/>
   <input type="text"  name="lname" onChange={(event)=>{setNoOfCandidates(event.target.value)}}/><br/>
   <label for="lname">No of Voters</label><br/>
@@ -110,7 +150,7 @@ export default function ElectionForm(props) {
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                           <Form.Control
                             type="text"
-                            name="description"
+                            name="voterId"
                             placeholder="Enter Voter Id"
                             value={field.voterId}
                             onChange={(event) =>
@@ -120,8 +160,8 @@ export default function ElectionForm(props) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                           <Form.Control
-                            type="number"
-                            name="price"
+                            type="text"
+                            name="mobileNo"
                             placeholder="Enter Mobile No"
                             value={field.mobileNo}
                             onChange={(event) =>
@@ -131,14 +171,22 @@ export default function ElectionForm(props) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                           <Form.Control
-                            type="number"
-                            name="rating"
+                            type="text"
+                            name="age"
                             placeholder="Enter Age"
                             value={field.age}
                             onChange={(event) =>
                               handleInputChange(index, event)
                             }
                           />
+                        </Form.Group>
+                        <Form.Group controlId="formFile" className="mb-3">
+                          <Form.Label>Choose Photo</Form.Label>
+                          <Form.Control 
+                          name="photo"
+                          type="file" 
+                         
+                          onChange={(event)=> handleInputChange(index,event)}/>
                         </Form.Group>
                         <Button
                           variant="secondary"
@@ -190,7 +238,7 @@ export default function ElectionForm(props) {
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                           <Form.Control
                             type="text"
-                            name="description"
+                            name="partyName"
                             placeholder="Enter Party Name"
                             value={field.partyName}
                             onChange={(event) =>
@@ -198,18 +246,14 @@ export default function ElectionForm(props) {
                             }
                           />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formBasicEmail">
-                          <Form.Control
-                            type="number"
-                            name="price"
-                            placeholder="Enter Price"
-                            value={field.price}
-                            onChange={(event) =>
-                              handleInputChangeCandidates(index, event)
-                            }
-                          />
-                        </Form.Group>
-                        
+                        <Form.Group controlId="formFile" className="mb-3">
+                          <Form.Label>Choose Photo</Form.Label>
+                          <Form.Control 
+                          name="photo"
+                          type="file" 
+                          
+                          onChange={(event)=> handleInputChangeCandidates(index,event)}/>
+                        </Form.Group> 
                         <Button
                           variant="secondary"
                           onClick={() => handleRemoveCandidates(index)}
@@ -227,6 +271,7 @@ export default function ElectionForm(props) {
       </Row>
     </Container>
 }
+{noOfCandidates&&noOfVoters&&<Button as="input" type="submit" value="Submit" className="col-md-12  text-right" onClick={(onSubmitHandler)}/>}
 <Button as="input" type="submit" value="Back" className="col-md-12  text-right" onClick={()=>{props.setViewForm(false)}}/>{' '}
     </div>
   )
