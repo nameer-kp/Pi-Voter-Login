@@ -8,13 +8,16 @@ import Voter from '../voter/Voter';
 export default function ElectionForm(props) {
  const [noOfVoters,setNoOfVoters]=useState(0)
  const [noOfCandidates,setNoOfCandidates]=useState(0)
-
+ const [electionName,setElectionName]=useState('')
+  
 
   const [allVoters, setAllVoters] = useState([
-    { name: "", voterId: "", mobileNo: null, age: null,photo:null},
+    { name: "", voterId: "", mobileNo: null, age: null},
   ]);
+  const [allVotersPhoto,setAllVotersPhoto]=useState([])
+  const [allCandidatesLogo,setAllCandidatesLogo]=useState([])
   const [allCandidates, setAllCandidates] = useState([
-    { name: "", partyName: "", logo: null },
+    { name: "", partyName: "", CanId: "" },
   ]);
   const handleAddVoters = () => {
     const values = [...allVoters];
@@ -22,8 +25,7 @@ export default function ElectionForm(props) {
       name: "",
       voterId: "",
       mobileNo: null,
-      age: null,
-      photo:null
+      age: null
     });
     setAllVoters(values);
   };
@@ -36,23 +38,30 @@ export default function ElectionForm(props) {
    const isConfirm= window.confirm("are you sure?")
    if(isConfirm){
     const formData = new FormData();
-    formData.append('Voters', allVoters);
-    formData.append('Candidates',allCandidates)
-    
+    formData.append('Voters', JSON.stringify(allVoters));
+    for (let i = 0 ; i < allVotersPhoto.length ; i++) {
+      formData.append("VoterPhotos", allVotersPhoto[i]);
+  }
+  for (let i = 0 ; i < allCandidatesLogo.length ; i++) {
+    formData.append("CandidateLogos", allCandidatesLogo[i]);
+}
+    formData.append('Candidates',JSON.stringify(allCandidates));
+    formData.append('ElectionDetails',JSON.stringify({electionName,noOfCandidates,noOfVoters}))
     console.log(allVoters);
-    console.log("submit success: ",formData.get('Voters'));
     fetch(
-			'http://127.0.0.1:5000/add_data',
+			'http://127.0.0.1:4000/adddata',
 			{
 				method: 'POST',
 				body: formData,
-        headers:{'content-type': 'multipart/form-data'},
+        // headers:{'content-type': 'multipart/form-data'},
 
 			}
 		)
 			.then((response) => response.json())
 			.then((result) => {
 				console.log('Success:', result);
+        window.alert("Election Added Successfully")
+        // document.getElementById("back").click()
 			})
 			.catch((error) => {
 				console.error('Error:', error);
@@ -62,15 +71,21 @@ export default function ElectionForm(props) {
   }
   const handleInputChange = (index, event) => {
     const values = [...allVoters];
+    const valuePhotos = allVotersPhoto;
     const updatedValue = event.target.name;
     
     if(updatedValue=='photo'){
-      values[index]['photo']=event.target.files[0]
+      var file=event.target.files[0]
+      var blob = file.slice(0, file.size, 'image/jpg'); 
+      var newFile = new File([blob],allVoters[index]['voterId']+'.jpg', {type: 'image/jpg'});  
+      valuePhotos[index]=newFile
+      
+
     }
     else{
       values[index][updatedValue] = event.target.value;
     }
-    
+    setAllVotersPhoto(valuePhotos)
     setAllVoters(values);
   };
   
@@ -80,7 +95,7 @@ export default function ElectionForm(props) {
     values.push({
       name: "",
       partyName: "",
-      logo: null,
+      CanId: "",
       
     });
     setAllCandidates(values);
@@ -94,13 +109,22 @@ export default function ElectionForm(props) {
   const handleInputChangeCandidates = (index, event) => {
     const values = [...allCandidates];
     const updatedValue = event.target.name;
+    const valuePhotos = allCandidatesLogo;
+
     values[index][updatedValue] = event.target.value;
     if(updatedValue=='logo'){
-      values[index]['logo']=event.target.files[0]
+      var file=event.target.files[0]
+      var blob = file.slice(0, file.size, 'image/jpg'); 
+      var newFile = new File([blob],allCandidates[index]['CanId']+'.jpg', {type: 'image/jpg'});  
+      console.log("----",allCandidates[index]['CanId']);
+      valuePhotos[index]=newFile
+      console.log(valuePhotos)
+
     }
     else{
       values[index][updatedValue] = event.target.value;
     }
+    setAllCandidatesLogo(valuePhotos)
     setAllCandidates(values);
   };
 
@@ -110,7 +134,7 @@ export default function ElectionForm(props) {
   return (
     <div>
       <label for="fname">Election Name:</label><br/>
-  <input type="text" id="fname" name="fname" /><br/>
+  <input type="text" id="fname" name="fname" onChange={(event)=>{setElectionName(event.target.value)}} /><br/>
   <label for="lname">No of Candidates</label><br/>
   <input type="text"  name="lname" onChange={(event)=>{setNoOfCandidates(event.target.value)}}/><br/>
   <label for="lname">No of Voters</label><br/>
@@ -189,6 +213,7 @@ export default function ElectionForm(props) {
                           onChange={(event)=> handleInputChange(index,event)}/>
                         </Form.Group>
                         <Button
+                          
                           variant="secondary"
                           onClick={() => handleRemoveVoters(index)}
                         >
@@ -227,6 +252,17 @@ export default function ElectionForm(props) {
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                           <Form.Control
                             type="text"
+                            name="CanId"
+                            placeholder="Enter Candidate Id"
+                            value={field.voterId}
+                            onChange={(event) =>
+                              handleInputChangeCandidates(index, event)
+                            }
+                          />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formBasicEmail">
+                          <Form.Control
+                            type="text"
                             name="name"
                             placeholder="Enter Candidate Name"
                             value={field.name}
@@ -249,7 +285,7 @@ export default function ElectionForm(props) {
                         <Form.Group controlId="formFile" className="mb-3">
                           <Form.Label>Choose Photo</Form.Label>
                           <Form.Control 
-                          name="photo"
+                          name="logo"
                           type="file" 
                           
                           onChange={(event)=> handleInputChangeCandidates(index,event)}/>
@@ -272,7 +308,7 @@ export default function ElectionForm(props) {
     </Container>
 }
 {noOfCandidates&&noOfVoters&&<Button as="input" type="submit" value="Submit" className="col-md-12  text-right" onClick={(onSubmitHandler)}/>}
-<Button as="input" type="submit" value="Back" className="col-md-12  text-right" onClick={()=>{props.setViewForm(false)}}/>{' '}
+<Button as="input" type="submit" id='back' value="Back" className="col-md-12  text-right" onClick={()=>{props.setViewForm(false)}}/>{' '}
     </div>
   )
 }

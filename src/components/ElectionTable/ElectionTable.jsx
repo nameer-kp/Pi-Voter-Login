@@ -1,9 +1,27 @@
-import React,{ useState } from 'react';
+import React,{ useState,useEffect } from 'react';
 import { Table } from 'react-bootstrap'
 import {Button} from 'react-bootstrap';
 import ElectionForm from './../ElectionForm/ElectionForm';
 export default function ElectionTable() {
+  const IP='http://127.0.0.1:4000'
   const [viewForm, setViewForm] = useState(false)
+  const [rows, setRows] = useState(null);
+  function fetchTable() {
+    fetch(IP+"/electiontableview", {
+       
+     })
+      .then((res) => res.json())
+      .then((data) => {
+        setRows(data);
+        console.log("returned data from electiontable view: ",data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  useEffect(() => {
+    fetchTable()
+  }, []);
   return (
     <div>
      {!viewForm?(
@@ -15,34 +33,29 @@ export default function ElectionTable() {
         <th>Election name</th>
         <th>No:of voters</th>
         <th>No:of Candidates</th>
-        <th>Election End Date</th>
-
       </tr>
     </thead>
     <tbody>
+    {rows&&(rows.map((row,index)=>(
+      
       <tr>
-        <td>1</td>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
+        <td>{row['election_id']}</td>
+        <td>{row['election_name']}</td>
+        <td>{row['no_of_voters']}</td>
+        <td>{row['no_of_candidates']}</td>
+        
       </tr>
-      <tr>
-        <td>2</td>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Larry the Bird</td>
-        <td>@twitter</td>
-        <td>@twitter</td>
-      </tr>
+      
+    )))}
+    
+      
+     
     </tbody>
     </Table>
     
     <Button as="input" type="submit" value="Add Election" className="col-md-12  text-right" onClick={()=>{setViewForm(true)}}/>{' '}
-       </div>):<ElectionForm setViewForm={setViewForm}/>}   
+       </div>):<ElectionForm setViewForm={setViewForm}/>
+       }   
     
     </div>
     
